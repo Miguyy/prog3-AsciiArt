@@ -1,5 +1,5 @@
 void setupAudio() {
-  music = new SoundFile(this, ""); // specify your audio file path here
+  music = new SoundFile(this, "PhylypsTrak.mp3");
   mic = new AudioIn(this, 0);
   amp = new Amplitude(this);
   fft = new FFT(this, 512);
@@ -26,7 +26,7 @@ void changeAudioFont() {
   if (useMic) {
     music.pause();
     mic.start();
-    turnAnalysersA(mic);
+    turnAnalysersB(mic);
   } else {
     mic.stop();
     music.play();
