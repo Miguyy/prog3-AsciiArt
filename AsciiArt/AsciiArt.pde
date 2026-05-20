@@ -1,12 +1,12 @@
 import processing.sound.*;
 
 // Audio global state
-SoundFile musica;
+SoundFile music;
 AudioIn mic;
 Amplitude amp;
 FFT fft;
 BeatDetector beat;
-boolean usarMic = false; // change between music and mic with 'm' key
+boolean useMic = false; // change between music and mic with 'm' key
 
 // Layers — 3 per student, drawn in separate PGraphics for better performance and control
 PGraphics pL1, pL2, pL3;   // Petúnia
@@ -14,7 +14,7 @@ PGraphics hL1, hL2, hL3;  // Henrique
 PGraphics mL1, mL2, mL3;   // Miguel
 
 // Layer visibility control (toggle with keys 1-6)
-boolean[] layerOn = { true, true, true, true, true, true };
+boolean[] layerOn = { true, true, true, true, true, true, true, true, true };
 
 color[] palette; // color palette for the artwork
 
@@ -23,8 +23,25 @@ void setup() {
   frameRate(25);
 
   palette = new color[]{
-    color(x, x, x),
-
+    /* Colors: 
+    010101
+    022664
+    210110
+    040813
+    1B3518
+    27C6ED
+    D71E24
+    4EA658
+    AFAFAF*/
+    color(1, 1, 1), // Color 1: #010101
+    color(2, 38, 100), // Color 2: #022664
+    color(33, 1, 16), // Color 3: #210110
+    color(4, 8, 19), // Color 4: #040813
+    color(27, 53, 24), // Color 5: #1B3518
+    color(39, 198, 237), // Color 6: #27C6ED
+    color(215, 30, 36), // Color 7: #D71E24
+    color(78, 166, 88), // Color 8: #4EA658
+    color(175, 175, 175) // Color 9: #AFAFAF
   };
 
   setupAudio(); // define in Audio.pde
@@ -45,18 +62,18 @@ void draw() {
   background(palette[0]);
 
   float amplitude = amp.analyze();
-  fft.analyze();
-  boolean beat = beat.isOnset();
+  fft.analyze();   // keep if used elsewhere
+  boolean beatDetected = amplitude > 0.12; // adjust threshold to taste
 
-  if (layerOn[0]) drawPetunia1(pL1, amplitude, beat);
-  if (layerOn[1]) drawPetunia2(pL2, amplitude, beat);
-  if (layerOn[2]) drawPetunia3(pL3, amplitude, beat);
-  if (layerOn[3]) drawHenrique1(hL1, amplitude, beat);
-  if (layerOn[4]) drawHenrique2(hL2, amplitude, beat);
-  if (layerOn[5]) drawHenrique3(hL3, amplitude, beat);
-  if (layerOn[6]) drawMiguel1(mL1, amplitude, beat);
-  if (layerOn[7]) drawMiguel2(mL2, amplitude, beat);
-  if (layerOn[8]) drawMiguel3(mL3, amplitude, beat);
+  if (layerOn[0]) drawPetunia1(pL1, amplitude, beatDetected);
+  if (layerOn[1]) drawPetunia2(pL2, amplitude, beatDetected);
+  if (layerOn[2]) drawPetunia3(pL3, amplitude, beatDetected);
+  if (layerOn[3]) drawHenrique1(hL1, amplitude, beatDetected);
+  if (layerOn[4]) drawHenrique2(hL2, amplitude, beatDetected);
+  if (layerOn[5]) drawHenrique3(hL3, amplitude, beatDetected);
+  if (layerOn[6]) drawMiguel1(mL1, amplitude, beatDetected);
+  if (layerOn[7]) drawMiguel2(mL2, amplitude, beatDetected);
+  if (layerOn[8]) drawMiguel3(mL3, amplitude, beatDetected);
 
   if (layerOn[0]) image(pL1, 0, 0);
   if (layerOn[1]) image(pL2, 0, 0);
@@ -74,6 +91,6 @@ void draw() {
 void keyPressed() {
   // 1..6 → change visibility of layers (1-3 for Petúnia, 4-6 for Henrique, 7-9 for Miguel)
   if (key >= '1' && key <= '9') layerOn[key - '1'] = !layerOn[key - '1'];
-  // m → alternar entre música e microfone (lógica em Audio.pde)
-  if (key == 'm' || key == 'M') alternarFonteAudio();
+  // m → change between music and mic input
+  if (key == 'm' || key == 'M') changeAudioFont();
 }
