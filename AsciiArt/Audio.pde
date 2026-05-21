@@ -3,10 +3,16 @@ void setupAudio() {
   mic = new AudioIn(this, 0);
   amp = new Amplitude(this);
   fft = new FFT(this, 512);
+  // BeatDetector setup (simple constructor)
   beat = new BeatDetector(this);
 
-  music.loop();
-  turnAnalysersA(music);
+  if (useMic) {
+    mic.start();
+    turnAnalysersB(mic);
+  } else {
+    music.loop();
+    turnAnalysersA(music);
+  }
 }
 
 void turnAnalysersA(SoundFile src) {
@@ -29,7 +35,7 @@ void changeAudioFont() {
     turnAnalysersB(mic);
   } else {
     mic.stop();
-    music.play();
+    music.loop();
     turnAnalysersA(music);
   }
 }
