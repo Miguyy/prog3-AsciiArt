@@ -1,4 +1,4 @@
-int columns, lines;
+/* int columns, lines;
 int font_size = 16;
 PFont fonte;
 
@@ -29,4 +29,4 @@ void drawPetunia1(PGraphics pg, float amp, boolean beat){
     }
 
     pg.endDraw();
-}
+} */
