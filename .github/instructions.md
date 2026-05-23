@@ -399,6 +399,21 @@ Reação ao som: fica menor ou maior de acordo com a frequência da música
 
 Biblioteca que transforma imagens em ASCII, vamos colocar meia dúzida de frames criando uma animaçao (à escolha do freguês), que vai ficar em loop por alguns segundos
 
+## 1ª layer do Miguel Sketch7 (MiguelLayer1_Sketch7.pde)
+
+Resumo: tipografia tipo "typewriter" preenchendo toda a área do sketch com várias linhas em paralelo; o comportamento é reativo ao áudio (música ou microfone) e tem uma limpeza em faixa (wipe) suave.
+
+- **Frame rate:** manter `frameRate(25)` — a layer foi otimizada para suavidade sem alterar fps.
+- **Cobertura:** o texto é desenhado em múltiplas linhas paralelas e ocupa toda a área do `PGraphics` (ajustado a `textSize` e espaçamento de linhas).
+- **Paleta:** usa as cores mais claras da `palette` definida em `AsciiArt.pde` (índices altos, por exemplo `palette[5..8]`) para o texto; o fundo usa uma das cores mais escuras (por exemplo `palette[3]`).
+- **Áudio / Controles:**
+  - A tecla `space` pausa/retoma a reprodução da `SoundFile` (comportamento global em `AsciiArt.pde`).
+  - A tecla `m` alterna entre música e microfone: quando `m` ativa o microfone, a layer passa a reagir ao som do `AudioIn`; premir `m` novamente volta para a música.
+  - Quando a música está parada e `m` é premido, o microfone é activado e a análise (Amplitude/FFT/BeatDetector) passa a usar o microfone, fazendo a animação reagir à voz.
+- **Suavidade:** a animação do "wipe" e os timings de escrita foram suavizados (interpolação e delays adaptativos por linha) para reduzir saltos perceptíveis a 25 fps.
+
+Notas de implementação: usar buffers reutilizáveis para a FFT/spectrum (evitar alocação por frame), tipar linhas em paralelo (cada linha tem o seu próprio temporizador) e escolher cores diretamente a partir de `palette` para garantir consistência cromática.
+
 Reação ao som: Muda de frame com a frequencia da música
 
 Referências Visuais:
@@ -435,3 +450,10 @@ Referências Visuais:
 ## 3ª layer do Miguel Sketch9:
 
 Reação ao som: Pirâmides em ascii, como se fossem ondas musicais, ficam maiores ou menores de acordo com a frequência da música
+
+---
+
+## Controls (Miguel Layer 1)
+
+- **Space:** Toggle music play / pause. Pressing space will stop the soundtrack when playing, and resume it when pressed again.
+- **M:** Toggle microphone input. Pressing `M` switches to the microphone (when music is stopped or when you want live voice input) and the sketch will react to the microphone amplitude/FFT. Press `M` again to stop the microphone and return control to the music.
