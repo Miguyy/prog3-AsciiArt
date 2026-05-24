@@ -1,9 +1,14 @@
-// Variáveis de configuração da grelha e fonte (inalteradas)
+/*
+  Propósito:
+    Criar uma representação visual do Sistema Solar usando arte ASCII, onde cada planeta é desenhado como uma esfera rotativa composta por caracteres, com texturas reativas ao áudio. 
+    O utilizador pode navegar entre os planetas usando as setas esquerda/direita, e cada planeta tem características visuais distintas baseadas em suas propriedades astronómicas e reatividade ao som.
+*/
+
 int columns, lines;
-int font_size = 16; // Fixado em 16 conforme pedido
+int font_size = 16; // Fixado em 16 
 PFont fon;
 
-// Lista de caracteres original (estritamente mantida)
+// Lista de caracteres  
 char[] characters = {'.', ',', '*', 'x', '#', '1', '0', '░', '='};
 
 // Sistema de navegação: 0=Sol, 1=Mercúrio, 2=Vénus, 3=Terra, 4=Marte, 5=Júpiter, 6=Saturno, 7=Úrano, 8=Neptuno
@@ -96,7 +101,7 @@ void drawMiguel3(PGraphics pg, float amp, boolean beat) {
       float dy = posY - centerY;
       boolean planetBodyDrawn = false;
 
-      // 1. DESENHAR O CORPO DO PLANETA (Esfera 3D)
+      // 1. DESENHAR O CORPO DO PLANETA 3D
       if (dx * dx + dy * dy <= radius * radius) {
         planetBodyDrawn = true;
         float dz = sqrt(radius * radius - (dx * dx + dy * dy));
@@ -201,7 +206,7 @@ void drawMiguel3(PGraphics pg, float amp, boolean beat) {
         pg.text(charToDraw, posX, posY);
       }
 
-      // 2. SISTEMA DE ANÉIS (Saturno e Úrano)
+      // 2. SISTEMA DE ANÉIS 
       if (!planetBodyDrawn && (currentPlanet == 6 || currentPlanet == 7)) {
         
         float cosTilt = cos(-axialTilt);
