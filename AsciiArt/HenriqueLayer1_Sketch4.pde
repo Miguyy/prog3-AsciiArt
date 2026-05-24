@@ -1,6 +1,6 @@
 // In HenriqueLayer1_Sketch4.pde
 String[] words = {
-  "IPP", "ESMAD", "P.PORTO", "TDW", "TSIW", "DM", "TMD", "DI", "PM"
+  "IPP", "ESMAD", "TDW", "TSIW", "DM", "TMD", "DI", "PM"
 };
 
 String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -14,6 +14,8 @@ int holdMs = 5000;
 int fadeMs = 1500;
 PGraphics maskA;
 PGraphics maskB;
+PFont henrique1Font;
+boolean henrique1FontsLogged = false;
 
 int lastMouseX = -1;
 int lastMouseY = -1;
@@ -37,6 +39,30 @@ void initHenrique1() {
   lastMoveMs = millis();
   mutateUntil = new IntDict();
   mutateChar = new IntDict();
+  if (!henrique1FontsLogged) {
+    println(PFont.list());
+    henrique1FontsLogged = true;
+  }
+  henrique1Font = createFont(selectHenrique1Font(), 48, true);
+}
+
+String selectHenrique1Font() {
+  String[] preferred = {
+    "Courier New Bold",
+    "Courier New",
+    "Consolas",
+    "Lucida Console",
+    "Monospaced"
+  };
+  String[] available = PFont.list();
+  for (int i = 0; i < preferred.length; i++) {
+    for (int j = 0; j < available.length; j++) {
+      if (available[j].equalsIgnoreCase(preferred[i])) {
+        return available[j];
+      }
+    }
+  }
+  return available.length > 0 ? available[0] : "Courier";
 }
 
 char randomAlphabetChar() {
@@ -119,64 +145,49 @@ void drawHenrique1(PGraphics pg, float amp, boolean beat) {
   maskA = renderWordMask(maskA, words[wordIndex], wordSize);
   maskB = renderWordMask(maskB, words[nextWordIndex], wordSize);
 
-  float time = millis() * 0.001;
-  float warpStrength = 18.0 + audioVolume * 35.0;
-  int step = max(10, int(16 + audioVolume * 40.0));
-  float glyphSize = max(8, step * 0.9);
+  // Strict, fixed grid for a rigid matrix layout.
+  int cellSize = max(12, int(min(pg.width, pg.height) * 0.03));
+  int cols = pg.width / cellSize;
+  int rows = pg.height / cellSize;
+  float glyphSize = cellSize * 0.85;
 
   pg.textAlign(CENTER, CENTER);
+  pg.textFont(henrique1Font);
   pg.textSize(glyphSize);
   pg.colorMode(HSB, 360, 100, 100, 255);
 
-  for (int y = 0; y < pg.height; y += step) {
-    for (int x = 0; x < pg.width; x += step) {
-      float n = noise(x * 0.004, y * 0.004, time * 0.35);
-      float waveX = sin(y * 0.015 + time * 2.2) * warpStrength;
-      float waveY = cos(x * 0.017 + time * 1.8) * warpStrength;
-      float ripple = (n - 0.5) * warpStrength * 2.0;
-      int sx = int(x + waveX + ripple);
-      int sy = int(y + waveY - ripple);
+  for (int row = 0; row < rows; row++) {
+    for (int col = 0; col < cols; col++) {
+      // Fixed matrix coordinates: each cell maps to an exact center position.
+      int x = col * cellSize + cellSize / 2;
+      int y = row * cellSize + cellSize / 2;
 
-      float alpha = sampleBlendAlpha(sx, sy, fadeT);
+      float alpha = sampleBlendAlpha(x, y, fadeT);
       if (alpha <= 10) continue;
 
-      float edgeAlpha = max(
-        sampleBlendAlpha(sx + step, sy, fadeT),
-        sampleBlendAlpha(sx - step, sy, fadeT)
-      );
-      edgeAlpha = max(edgeAlpha, sampleBlendAlpha(sx, sy + step, fadeT));
-      edgeAlpha = max(edgeAlpha, sampleBlendAlpha(sx, sy - step, fadeT));
-
-      boolean isEdge = edgeAlpha < 80.0;
-      int gridX = x / step;
-      int gridY = y / step;
-      int key = gridY * 10000 + gridX;
+      int key = row * 10000 + col;
       float mouseDist = dist(mouseX, mouseY, x, y);
-      boolean nearMouse = mouseDist < step * 2.5;
+      boolean nearMouse = mouseDist < cellSize * 2.5;
 
-      if (!isEdge && nearMouse) {
+      if (nearMouse) {
         mutateUntil.set(str(key), now + mutateDecayMs);
         if (!mutateChar.hasKey(str(key))) {
           mutateChar.set(str(key), int(randomMutateChar()));
         }
       }
 
-      if (isEdge) {
+      int until = mutateUntil.hasKey(str(key)) ? mutateUntil.get(str(key)) : 0;
+      if (until > now) {
+        int stored = mutateChar.get(str(key));
         pg.fill(lockedHue, 90, 100, 255);
-        pg.text(randomAlphabetChar(), x, y);
+        pg.text(char(stored), x, y);
       } else {
-        int until = mutateUntil.hasKey(str(key)) ? mutateUntil.get(str(key)) : 0;
-        if (until > now) {
-          int stored = mutateChar.get(str(key));
-          pg.fill(lockedHue, 90, 100, 255);
-          pg.text(char(stored), x, y);
-        } else {
-          pg.fill(lockedHue, lockedSat, lockedBri, 220);
-          pg.text(",", x, y);
-          if (mutateChar.hasKey(str(key))) {
-            mutateChar.remove(str(key));
-            mutateUntil.remove(str(key));
-          }
+        // Default matrix glyphs inside the text mask region.
+        pg.fill(lockedHue, lockedSat, lockedBri, 220);
+        pg.text(",", x, y);
+        if (mutateChar.hasKey(str(key))) {
+          mutateChar.remove(str(key));
+          mutateUntil.remove(str(key));
         }
       }
     }
