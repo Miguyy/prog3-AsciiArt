@@ -31,7 +31,7 @@ void initHenrique3() {
         int frameNumber = i; // frames are 0..22
         String frameLabel = nf(frameNumber, 2); // 00..22
         // Load from sketch root frames folder (frame00.gif..frame22.gif)
-        PImage img = loadImage(sketchPath("frames/frame" + frameLabel + ".gif"));
+        PImage img = loadImage(sketchPath("data/frame" + frameLabel + ".gif"));
         if (img != null) {
             img.resize(HENRIQUE3_TARGET_W, HENRIQUE3_TARGET_H); // normalize size
         }
