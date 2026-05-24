@@ -13,16 +13,8 @@ void setupAudio() {
   mic = new AudioIn(this, 0);
   amp = new Amplitude(this);
   fft = new FFT(this, 512);
-  // BeatDetector setup (simple constructor)
   beat = new BeatDetector(this);
 
-  if (useMic) {
-    mic.start();
-    turnAnalysersB(mic);
-  } else {
-    music.loop();
-    turnAnalysersA(music);
-  }
   // Começar a tocar em loop por omissão e ligar os analisadores ao ficheiro
   music.loop();
   turnAnalysersA(music);
@@ -53,7 +45,7 @@ void changeAudioFont() {
   } else {
     // Voltar para ficheiro: parar mic, retomar música e ligar analisadores ao ficheiro
     mic.stop();
-    music.loop();
+    music.play();
     turnAnalysersA(music);
   }
 }

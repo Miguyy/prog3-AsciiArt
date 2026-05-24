@@ -40,7 +40,6 @@ void initHenrique1() {
   mutateUntil = new IntDict();
   mutateChar = new IntDict();
   if (!henrique1FontsLogged) {
-    println(PFont.list());
     henrique1FontsLogged = true;
   }
   henrique1Font = createFont(selectHenrique1Font(), 48, true);
@@ -156,6 +155,9 @@ void drawHenrique1(PGraphics pg, float amp, boolean beat) {
   pg.textSize(glyphSize);
   pg.colorMode(HSB, 360, 100, 100, 255);
 
+  // Use the beat parameter to add a temporary brightness boost when true.
+  float beatBoost = beat ? 15.0 : 0.0;
+
   for (int row = 0; row < rows; row++) {
     for (int col = 0; col < cols; col++) {
       // Fixed matrix coordinates: each cell maps to an exact center position.
@@ -179,11 +181,11 @@ void drawHenrique1(PGraphics pg, float amp, boolean beat) {
       int until = mutateUntil.hasKey(str(key)) ? mutateUntil.get(str(key)) : 0;
       if (until > now) {
         int stored = mutateChar.get(str(key));
-        pg.fill(lockedHue, 90, 100, 255);
+        pg.fill(lockedHue, 90, min(100, 100 + beatBoost), 255);
         pg.text(char(stored), x, y);
       } else {
         // Default matrix glyphs inside the text mask region.
-        pg.fill(lockedHue, lockedSat, lockedBri, 220);
+        pg.fill(lockedHue, lockedSat, min(100, lockedBri + beatBoost), 220);
         pg.text(",", x, y);
         if (mutateChar.hasKey(str(key))) {
           mutateChar.remove(str(key));
