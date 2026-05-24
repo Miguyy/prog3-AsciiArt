@@ -39,12 +39,25 @@ void setup() {
   
 
   palette = new color[]{
-    color(1, 1, 1),       // #010101 - Quase Preto
-    color(34, 0, 16),      // #220010 - Roxo Escuro
-    color(190, 42, 56),    // #be2a38 - Vermelho
-    color(71, 200, 99),    // #47c863 - Verde
-    color(45, 139, 220),   // #2d8bdc - Azul
-    color(91, 160, 217)    // #5ba0d9 - Azul Claro
+    /* Colors: 
+    010101
+    022664
+    210110
+    040813
+    1B3518
+    27C6ED
+    D71E24
+    4EA658
+    AFAFAF*/
+    color(1, 1, 1), // Color 1: #010101
+    color(2, 38, 100), // Color 2: #022664
+    color(33, 1, 16), // Color 3: #210110
+    color(4, 8, 19), // Color 4: #040813
+    color(27, 53, 24), // Color 5: #1B3518
+    color(39, 198, 237), // Color 6: #27C6ED
+    color(215, 30, 36), // Color 7: #D71E24
+    color(78, 166, 88), // Color 8: #4EA658
+    color(175, 175, 175) // Color 9: #AFAFAF
   };
 
   // Inicializa o sistema de áudio (ver Audio.pde)
@@ -78,19 +91,18 @@ void draw() {
   // Ler analisadores de áudio
   float amplitude = amp.analyze();
   fft.analyze();
-  boolean isBeat = beat.isBeat();
   // Detecção simples de batida com threshold ajustável
   boolean beatDetected = amplitude > 0.12;
 
-  if (layerOn[0]) drawPetunia1(pL1, amplitude, isBeat);
-  if (layerOn[1]) drawPetunia2(pL2, amplitude, isBeat);
-  if (layerOn[2]) drawPetunia3(pL3, amplitude, isBeat);
-  if (layerOn[3]) drawHenrique1(hL1, amplitude, isBeat);
-  if (layerOn[4]) drawHenrique2(hL2, amplitude, isBeat);
-  if (layerOn[5]) drawHenrique3(hL3, amplitude, isBeat);
-  if (layerOn[6]) drawMiguel1(mL1, amplitude, isBeat);
-  if (layerOn[7]) drawMiguel2(mL2, amplitude, isBeat);
-  if (layerOn[8]) drawMiguel3(mL3, amplitude, isBeat);
+  if (layerOn[0]) drawPetunia1(pL1, amplitude, beatDetected);
+  if (layerOn[1]) drawPetunia2(pL2, amplitude, beatDetected);
+  if (layerOn[2]) drawPetunia3(pL3, amplitude, beatDetected);
+  if (layerOn[3]) drawHenrique1(hL1, amplitude, beatDetected);
+  if (layerOn[4]) drawHenrique2(hL2, amplitude, beatDetected);
+  if (layerOn[5]) drawHenrique3(hL3, amplitude, beatDetected);
+  if (layerOn[6]) drawMiguel1(mL1, amplitude, beatDetected);
+  if (layerOn[7]) drawMiguel2(mL2, amplitude, beatDetected);
+  if (layerOn[8]) drawMiguel3(mL3, amplitude, beatDetected);
 
   if (layerOn[0]) image(pL1, 0, 0);
   if (layerOn[1]) image(pL2, 0, 0);
@@ -154,9 +166,6 @@ void renderHUD(){
 };
 
 void keyPressed() {
-  // 1..9 → change visibility of layers (1-3 for Petúnia, 4-6 for Henrique, 7-9 for Miguel)
-  if (key >= '1' && key <= '9') layerOn[key - '1'] = !layerOn[key - '1'];
-  // m → change between music and mic input
   // Mudar entre as layers com as teclas '1'..'9'
   if (key >= '1' && key <= '9') {
     int idx = key - '1';
