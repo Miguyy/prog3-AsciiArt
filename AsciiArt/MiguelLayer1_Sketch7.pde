@@ -37,7 +37,7 @@ boolean ML7_autoEraseMode = false;
 int ML7_delayBetweenRows = 6; // frames a esperar entre linhas em modo auto
 int ML7_delayCounter = 0;
 
-// Cache do estado apagado (rows x cols) — reatribuído quando o layout muda
+// Cache do estado apagado (rows x cols) 
 int ML7_cachedCols = -1;
 int ML7_cachedRows = -1;
 boolean[][] ML7_erased = null;
@@ -50,7 +50,7 @@ void drawMiguel1(PGraphics pg, float amp, boolean beat){
     color textCol = (palette != null && palette.length > 5) ? palette[5] : color(39, 198, 237);
     pg.background(bgCol);
 
-    // Criação preguiçosa (lazy) da fonte e cache — só quando as dimensões mudam
+    // Criação fonte
     if (ML7_font == null || ML7_cachedW != pg.width || ML7_cachedH != pg.height){
         ML7_fontSize = 16; // tamanho inicial para ajustar
         ML7_font = createFont("Courier", ML7_fontSize);
@@ -199,9 +199,10 @@ void drawMiguel1(PGraphics pg, float amp, boolean beat){
     pg.endDraw();
 }
 
-// key handler invoked from AsciiArt.pde keyPressed() via try/catch
+// Controlo de teclas específico para esta layer: 'e', 'E' e 'r'
 void miguelLayer1KeyPressed(){
-    // lowercase 'e' → trigger a single-row erase; uppercase 'E' → toggle auto-sequential erase
+    // ' e ' → pedir apagamento de uma linha (imediato ou pendente se já estiver a apagar)
+    // ' E ' → alternar modo de apagamento automático sequencial
     if (key == 'e'){
         ML7_pendingErase += 1;
     } else if (key == 'E'){
@@ -213,7 +214,7 @@ void miguelLayer1KeyPressed(){
             ML7_erasing = false;
         }
     } else if (key == 'r' || key == 'R'){
-        // restart: clear erased-state and stop auto mode
+        // Reset completo: limpar estado de apagamento e cache
         if (ML7_erased != null){
             for (int ry = 0; ry < ML7_erased.length; ry++){
                 for (int rx = 0; rx < ML7_erased[ry].length; rx++) ML7_erased[ry][rx] = false;

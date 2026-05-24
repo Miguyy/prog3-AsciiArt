@@ -186,18 +186,18 @@ void keyPressed() {
   try {
     miguelLayer1KeyPressed();
   } catch (Exception e) {
-    // ignore if function not present
+    // Ignora se a função não existir 
   }
   try {
     miguelLayer2KeyPressed();
   } catch (Exception e) {
-    // ignore if function not present
+    // Ignora se a função não existir 
   }
   try {
     miguelLayer3KeyPressed();
   } catch (Exception e) {
-    // ignore if function not present
+    // Ignora se a função não existir 
   }
-  // toggle HUD
+  //  Esconde HUD
   if (key == 'h' || key == 'H') showHUD = !showHUD;
 }

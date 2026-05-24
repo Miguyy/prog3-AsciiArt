@@ -449,7 +449,8 @@ Referências Visuais:
 
 ## 3ª layer do Miguel Sketch9:
 
-Reação ao som: Pirâmides em ascii, como se fossem ondas musicais, ficam maiores ou menores de acordo com a frequência da música
+Reação ao som: Criar uma representação visual do Sistema Solar usando arte ASCII, onde cada planeta é desenhado como uma esfera rotativa composta por caracteres, com texturas reativas ao áudio.
+O utilizador pode navegar entre os planetas usando as setas esquerda/direita, e cada planeta tem características visuais distintas baseadas em suas propriedades astronómicas e reatividade ao som.
 
 ---
 
