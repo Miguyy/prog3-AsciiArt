@@ -1,4 +1,9 @@
-// In HenriqueLayer1_Sketch4.pde
+/*
+  Propósito:
+    Criar uma grelha ASCII rígida que revela palavras (IPP, ESMAD, etc.) com
+    transições suaves entre máscaras, reagindo ao áudio e ao rato. As letras
+    mudam temporariamente perto do cursor e a cor varia com o movimento.
+*/
 String[] words = {
   "IPP", "ESMAD", "TDW", "TSIW", "DM", "TMD", "DI", "PM"
 };
@@ -23,6 +28,7 @@ int lastMoveMs = 0;
 float lockedHue = 200.0;
 float lockedSat = 70.0;
 float lockedBri = 90.0;
+float palettePhase = 0.0;
 IntDict mutateUntil;
 IntDict mutateChar;
 int mutateDecayMs = 350;
@@ -46,22 +52,7 @@ void initHenrique1() {
 }
 
 String selectHenrique1Font() {
-  String[] preferred = {
-    "Courier New Bold",
-    "Courier New",
-    "Consolas",
-    "Lucida Console",
-    "Monospaced"
-  };
-  String[] available = PFont.list();
-  for (int i = 0; i < preferred.length; i++) {
-    for (int j = 0; j < available.length; j++) {
-      if (available[j].equalsIgnoreCase(preferred[i])) {
-        return available[j];
-      }
-    }
-  }
-  return available.length > 0 ? available[0] : "Courier";
+  return "Courier";
 }
 
 char randomAlphabetChar() {
@@ -78,13 +69,21 @@ void updatePalette() {
   int now = millis();
   float speed = dist(mouseX, mouseY, lastMouseX, lastMouseY);
   if (speed > 1.0) {
-    lockedHue = (lockedHue + speed * 4.0) % 360.0;
-    lockedSat = 60.0 + (speed * 3.0) % 40.0;
-    lockedBri = 75.0 + (speed * 2.0) % 25.0;
+    palettePhase = (palettePhase + speed * 0.02) % 3.0;
     lastMoveMs = now;
   }
   lastMouseX = mouseX;
   lastMouseY = mouseY;
+}
+
+color paletteBlend(float phase) {
+  color c1 = (palette != null && palette.length > 5) ? palette[5] : color(39, 198, 237);
+  color c2 = (palette != null && palette.length > 6) ? palette[6] : color(215, 30, 36);
+  color c3 = (palette != null && palette.length > 7) ? palette[7] : color(78, 166, 88);
+  float t = phase % 3.0;
+  if (t < 1.0) return lerpColor(c1, c2, t);
+  if (t < 2.0) return lerpColor(c2, c3, t - 1.0);
+  return lerpColor(c3, c1, t - 2.0);
 }
 
 PGraphics renderWordMask(PGraphics mask, String word, float textSize) {
@@ -144,7 +143,7 @@ void drawHenrique1(PGraphics pg, float amp, boolean beat) {
   maskA = renderWordMask(maskA, words[wordIndex], wordSize);
   maskB = renderWordMask(maskB, words[nextWordIndex], wordSize);
 
-  // Strict, fixed grid for a rigid matrix layout.
+  // Grelha fixa para um layout rígido em matriz.
   int cellSize = max(12, int(min(pg.width, pg.height) * 0.03));
   int cols = pg.width / cellSize;
   int rows = pg.height / cellSize;
@@ -153,14 +152,15 @@ void drawHenrique1(PGraphics pg, float amp, boolean beat) {
   pg.textAlign(CENTER, CENTER);
   pg.textFont(henrique1Font);
   pg.textSize(glyphSize);
-  pg.colorMode(HSB, 360, 100, 100, 255);
+  pg.colorMode(RGB, 255, 255, 255, 255);
 
-  // Use the beat parameter to add a temporary brightness boost when true.
-  float beatBoost = beat ? 15.0 : 0.0;
+  color baseCol = paletteBlend(palettePhase);
+  color beatCol = paletteBlend(palettePhase + 0.8);
+  color hoverCol = paletteBlend(palettePhase + 1.6);
 
   for (int row = 0; row < rows; row++) {
     for (int col = 0; col < cols; col++) {
-      // Fixed matrix coordinates: each cell maps to an exact center position.
+      // Coordenadas fixas da matriz: cada célula mapeia para o centro exato.
       int x = col * cellSize + cellSize / 2;
       int y = row * cellSize + cellSize / 2;
 
@@ -181,11 +181,11 @@ void drawHenrique1(PGraphics pg, float amp, boolean beat) {
       int until = mutateUntil.hasKey(str(key)) ? mutateUntil.get(str(key)) : 0;
       if (until > now) {
         int stored = mutateChar.get(str(key));
-        pg.fill(lockedHue, 90, min(100, 100 + beatBoost), 255);
+        pg.fill(beat ? beatCol : hoverCol, 255);
         pg.text(char(stored), x, y);
       } else {
-        // Default matrix glyphs inside the text mask region.
-        pg.fill(lockedHue, lockedSat, min(100, lockedBri + beatBoost), 220);
+        // Glifos padrão da matriz dentro da máscara de texto.
+        pg.fill(baseCol, 220);
         pg.text(",", x, y);
         if (mutateChar.hasKey(str(key))) {
           mutateChar.remove(str(key));
@@ -195,7 +195,6 @@ void drawHenrique1(PGraphics pg, float amp, boolean beat) {
     }
   }
 
-  pg.colorMode(RGB, 255, 255, 255, 255);
   pg.endDraw();
 }
 

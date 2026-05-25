@@ -1,25 +1,29 @@
-// Henrique layer 2: ASCII torus on a rigid grid (IOCCC-style)
-// Uses existing audio analysis data from Audio.pde
+/*
+    Propósito:
+        Desenhar um toro ASCII numa grelha rígida com shading por iluminação,
+        reagindo ao áudio para rotação e pulsação. Usa a análise de áudio existente
+        para conduzir o movimento e integra-se com a paleta dinâmica.
+*/
 
-// ASCII density ramp for lighting
+// Rampa de densidade ASCII para iluminação
 String densityRamp = ".,-~:;=!*#$@";
 
-// Rigid grid configuration
+// Configuração da grelha rígida
 int cellSize = 16;
 int gridCols = 0;
 int gridRows = 0;
 
-// Toroid parameters (thin ring)
+// Parâmetros do toro (anel fino)
 float torusR = 0.7;   // major radius (smaller)
 float torusr = 0.2;   // minor radius (thin)
 
-// Rotation state
+// Estado de rotação
 float rotA = 0.0;
 float rotB = 0.0;
 float rotVelA = 0.02;
 float rotVelB = 0.015;
 
-// Depth buffers for ASCII grid
+// Buffers de profundidade para a grelha ASCII
 float[] zBuffer;
 int[] shadeBuffer;
 
@@ -46,7 +50,7 @@ void drawHenrique2(PGraphics pg, float amp, boolean beat) {
     ensureGrid(pg);
     clearGrid();
 
-    // Audio-driven rotation and pulsation
+    // Rotação e pulsação conduzidas pelo áudio
     float audioVolume = constrain(amp, 0.0, 1.0);
     float beatKick = beat ? 0.04 : 0.0;
     rotVelA = lerp(rotVelA, 0.02 + audioVolume * 0.08 + beatKick, 0.15);
@@ -56,15 +60,15 @@ void drawHenrique2(PGraphics pg, float amp, boolean beat) {
 
     float pulse = 1.0 + audioVolume * 0.22 + (beat ? 0.08 : 0.0);
     float R = torusR * pulse;
-    float r = torusr * pulse; // thin ring stays thin
+    float r = torusr * pulse; // anel fino mantem-se fino
 
-    // Precompute rotation sines/cosines
+    // Pré-cálculo de senos/cossenos da rotação
     float cosA = cos(rotA);
     float sinA = sin(rotA);
     float cosB = cos(rotB);
     float sinB = sin(rotB);
 
-    // Project torus points into the rigid ASCII grid
+    // Projetar pontos do toro na grelha ASCII rígida
     for (float theta = 0.0; theta < TWO_PI; theta += 0.12) {
         float cosT = cos(theta);
         float sinT = sin(theta);
@@ -72,13 +76,13 @@ void drawHenrique2(PGraphics pg, float amp, boolean beat) {
             float cosP = cos(phi);
             float sinP = sin(phi);
 
-            // Torus surface point in object space
+            // Ponto da superfície do toro no espaço do objeto
             float circle = R + r * cosT;
             float x = circle * cosP;
             float y = circle * sinP;
             float z = r * sinT;
 
-            // Rotate in 3D
+            // Rodar em 3D
             float x1 = x;
             float y1 = y * cosA - z * sinA;
             float z1 = y * sinA + z * cosA;
@@ -87,7 +91,7 @@ void drawHenrique2(PGraphics pg, float amp, boolean beat) {
             float y2 = y1;
             float z2 = -x1 * sinB + z1 * cosB;
 
-            // Perspective projection to grid coordinates
+            // Projeção em perspetiva para coordenadas da grelha
             float depth = 2.8 + z2;
             float invDepth = 1.0 / depth;
             float projX = x2 * invDepth;
@@ -99,19 +103,19 @@ void drawHenrique2(PGraphics pg, float amp, boolean beat) {
                 continue;
             }
 
-            // Surface normal for ASCII shading
+            // Normal da superfície para shading ASCII
             float nx = cosP * cosT;
             float ny = sinP * cosT;
             float nz = sinT;
 
-            // Rotate normal (same as point rotation, but no translation)
+            // Rodar a normal (igual ao ponto, sem translação)
             float ny1 = ny * cosA - nz * sinA;
             float nz1 = ny * sinA + nz * cosA;
             float nx2 = nx * cosB + nz1 * sinB;
             float ny2 = ny1;
             float nz2 = -nx * sinB + nz1 * cosB;
 
-            // Simple light direction
+            // Direção de luz simples
             float light = nx2 * 0.2 + ny2 * 0.6 + nz2 * 0.7;
             int shade = int(map(light, -1.0, 1.0, 0, densityRamp.length() - 1));
             shade = constrain(shade, 0, densityRamp.length() - 1);
@@ -126,11 +130,14 @@ void drawHenrique2(PGraphics pg, float amp, boolean beat) {
 
     pg.beginDraw();
     pg.clear();
-    pg.colorMode(HSB, 360, 100, 100, 255);
+    pg.colorMode(RGB, 255, 255, 255, 255);
     pg.textAlign(CENTER, CENTER);
     pg.textSize(cellSize * 0.9);
 
-    // Render the rigid ASCII matrix (cells mapped to exact centers)
+    color baseCol = paletteBlend(palettePhase);
+    color beatCol = paletteBlend(palettePhase + 0.8);
+
+    // Render da matriz ASCII rígida (células mapeadas para centros exatos)
     for (int row = 0; row < gridRows; row++) {
         for (int col = 0; col < gridCols; col++) {
             int idx = row * gridCols + col;
@@ -139,11 +146,9 @@ void drawHenrique2(PGraphics pg, float amp, boolean beat) {
             char glyph = densityRamp.charAt(shadeBuffer[idx]);
             int x = col * cellSize + cellSize / 2;
             int y = row * cellSize + cellSize / 2;
-            pg.fill(lockedHue, lockedSat, lockedBri, 230);
+            pg.fill(beat ? beatCol : baseCol, 230);
             pg.text(glyph, x, y);
         }
     }
-
-    pg.colorMode(RGB, 255, 255, 255, 255);
     pg.endDraw();
 }

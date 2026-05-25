@@ -198,6 +198,11 @@ void keyPressed() {
   } catch (Exception e) {
     // Ignora se a função não existir 
   }
+  try {
+    henriqueLayer3KeyPressed();
+  } catch (Exception e) {
+    // Ignora se a função não existir 
+  }
   //  Esconde HUD
   if (key == 'h' || key == 'H') showHUD = !showHUD;
 }
