@@ -5,7 +5,7 @@ int tamFonte3 = 16;
 int numColunas3, numLinhas3;
 PFont fonte3;
 
-char[] sequencia3 = {'.', ',', '*', 'x', '#', '1', '0', '░', '='};
+char[] characters3 = {'.', ',', '*', 'x', '#', '1', '0', '░', '='};
 
 // --- ESTADO DA CÂMARA E PROJEÇÃO ---
 
@@ -97,10 +97,10 @@ void desenharGrelha(PGraphics pg) {
 
       if (perto_de_vertice(px, py)) {
         pg.fill(palette[8]);
-        pg.text(sequencia3[6], px, py); // '0'
+        pg.text(characters3[6], px, py); // '0'
       } else {
         pg.fill(palette[2]);
-        pg.text(sequencia3[4], px, py); // '#'
+        pg.text(characters3[4], px, py); // '#'
       }
     }
   }

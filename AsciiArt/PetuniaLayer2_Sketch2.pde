@@ -5,7 +5,7 @@ int tamFonte2 = 16;
 PFont fonte2;
 float tempo2 = 0;
 
-char[] sequencia2 = {' ', '.', ',', '*', 'x', '#', '0'};
+char[] characters2 = {' ', '.', ',', '*', 'x', '#', '0'};
 
 
 void drawPetunia2(PGraphics pg, float amplitude, boolean batida) {
@@ -69,7 +69,7 @@ char calcularCaractere(int col, int linha, float amplitude, float velocidadeRato
 
   // Mapeia o valor normalizado para um índice na sequência de caracteres
   float tNormalizado = map(t, limiar, 1.0, 0, 1);
-  int indice = constrain(int(tNormalizado * (sequencia2.length - 1)), 0, sequencia2.length - 1);
+  int indice = constrain(int(tNormalizado * (characters2.length - 1)), 0, characters2.length - 1);
 
-  return sequencia2[indice];
+  return characters2[indice];
 }

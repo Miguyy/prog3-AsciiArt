@@ -179,8 +179,7 @@ void desenharFundoReativo(PGraphics pg, float x, float y, float amplitude, boole
     pg.fill(palette[1]);
     pg.text(sequencia1[int(random(sequencia1.length))], x, y);
   } else {
-    float pulso = abs(sin(frameCount * 0.05));
-    pg.fill(lerpColor(palette[2], palette[1], pulso));
+    pg.fill(palette[2]);
     pg.text(sequencia1[4], x, y);
   }
 }
