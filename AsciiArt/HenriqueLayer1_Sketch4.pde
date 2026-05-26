@@ -48,7 +48,7 @@ void initHenrique1() {
   if (!henrique1FontsLogged) {
     henrique1FontsLogged = true;
   }
-  henrique1Font = createFont(selectHenrique1Font(), 48, true);
+  henrique1Font = createFont(selectHenrique1Font(), 16, true);
 }
 
 String selectHenrique1Font() {
@@ -145,10 +145,10 @@ void drawHenrique1(PGraphics pg, float amp, boolean beat) {
   maskB = renderWordMask(maskB, words[nextWordIndex], wordSize);
 
   // Grelha fixa para um layout rígido em matriz.
-  int cellSize = max(12, int(min(pg.width, pg.height) * 0.03));
+  int cellSize = 16;
   int cols = pg.width / cellSize;
   int rows = pg.height / cellSize;
-  float glyphSize = cellSize * 0.85;
+  float glyphSize = 16;
 
   pg.textAlign(CENTER, CENTER);
   pg.textFont(henrique1Font);
@@ -162,11 +162,11 @@ void drawHenrique1(PGraphics pg, float amp, boolean beat) {
   for (int row = 0; row < rows; row++) {
     for (int col = 0; col < cols; col++) {
       // Coordenadas fixas da matriz: cada célula mapeia para o centro exato.
-      int x = col * cellSize + cellSize / 2;
-      int y = row * cellSize + cellSize / 2;
+      float x = col * cellSize + cellSize / 2.0;
+      float y = row * cellSize + cellSize / 2.0;
 
-      float alpha = sampleBlendAlpha(x, y, fadeT);
-      if (alpha <= 10) continue;
+      float alpha = sampleBlendAlpha(int(x), int(y), fadeT);
+      if (alpha <= 128) continue;
 
       int key = row * 10000 + col;
       float mouseDist = dist(mouseX, mouseY, x, y);
@@ -198,5 +198,3 @@ void drawHenrique1(PGraphics pg, float amp, boolean beat) {
 
   pg.endDraw();
 }
-
-		
