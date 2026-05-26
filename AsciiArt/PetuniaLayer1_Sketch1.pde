@@ -176,7 +176,7 @@ boolean desenharInputUtilizador(PGraphics pg, String[] linhasVisiveis,
 
 void desenharFundoReativo(PGraphics pg, float x, float y, float amplitude, boolean batida) {
   if (batida) {
-    color c = lerpColor(palette[1], palette[5], amplitude);
+    color c = lerpColor(palette[1], palette[2], amplitude);
     pg.fill(c);
     pg.text(sequencia1[int(random(sequencia1.length))], x, y);
   } else {
