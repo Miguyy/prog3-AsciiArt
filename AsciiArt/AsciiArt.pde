@@ -90,7 +90,15 @@ void draw() {
 
 void keyPressed() {
   // 1..6 → change visibility of layers (1-3 for Petúnia, 4-6 for Henrique, 7-9 for Miguel)
-  if (key >= '1' && key <= '9') layerOn[key - '1'] = !layerOn[key - '1'];
+  if (key >= '1' && key <= '9') {
+    int index = key - '1';
+    layerOn[index] = !layerOn[index];
+    
+    if (key == '1' && layerOn[0]) {
+      resetLayer1(); 
+    }
+  }
   // m → change between music and mic input
   if (key == 'm' || key == 'M') changeAudioFont();
+  keyPressed_p1();
 }
