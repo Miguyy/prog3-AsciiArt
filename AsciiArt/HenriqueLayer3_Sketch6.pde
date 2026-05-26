@@ -5,8 +5,9 @@
         provoca variações locais nos glifos e no brilho.
 */
 
-// ---- Motor ASCII + estado do ciclo de frames ----
+// --- CONFIGURAÇÃO GERAL ---
 final String ASCII_RAMP = " .:-=+*#%@"; // escuro -> claro
+
 final char HENRIQUE3_SOLID_CHAR = '@';
 final int HENRIQUE3_FRAME_COUNT = 23;
 final int HENRIQUE3_TARGET_W = 1200;
@@ -15,12 +16,19 @@ final int HENRIQUE3_CORNER_FRAME_COUNT = 33;
 final float HENRIQUE3_SILHOUETTE_SCALE = 0.85;
 final float HENRIQUE3_CORNER_SCALE = 0.32;
 
+int henrique3CharSize = 16;     // ajustar para mudar a densidade ASCII
+int henrique3CharW = 6;         // espaçamento horizontal mais apertado para preenchimento sólido
+int henrique3CharH = 10;        // espaçamento vertical mais apertado para preenchimento sólido
+int henrique3HoverRadius = 60;  // raio de hover do rato em píxeis
+
+// --- ESTADO DAS ESTRELAS ---
 char[] henrique3StarChars = {'.', ',', '*'};
 int[][] henrique3StarMap;
 float[][] henrique3StarGlow;
 int henrique3StarCols = -1;
 int henrique3StarRows = -1;
 
+// --- ESTADO DOS FRAMES ---
 PImage[] henrique3Frames;
 PImage[] henrique3CornerFrames;
 int henrique3FrameIndex = 0;
@@ -28,19 +36,19 @@ int henrique3CornerIndex = 0;
 boolean henrique3Ready = false;
 int henrique3CornerVisibleCount = 0;
 
-PFont henrique3Font;
-int henrique3CharSize = 16; // ajustar para mudar a densidade ASCII
-int henrique3CharW = 6; // espaçamento horizontal mais apertado para preenchimento sólido
-int henrique3CharH = 10; // espaçamento vertical mais apertado para preenchimento sólido
-int henrique3HoverRadius = 60; // raio de hover do rato em píxeis
-
+// --- THRESHOLDS DE ÁUDIO ---
 int henrique3LastSwitchMs = 0;
-int henrique3MinSwitchIntervalMs = 80; // debounce para batidas rápidas
-float henrique3SilenceThreshold = 0.015; // abaixo disto, congela o frame
-float henrique3SpikeThreshold = 0.06; // acima disto, permite troca
+int henrique3MinSwitchIntervalMs = 80;    // debounce para batidas rápidas
+float henrique3SilenceThreshold = 0.015;  // abaixo disto, congela o frame
+float henrique3SpikeThreshold = 0.06;     // acima disto, permite troca
 float henrique3SilhouetteThreshold = 120; // limiar mais amplo para silhueta completa
 
-// Inicializar frames e fonte uma vez (carregamento preguiçoso no draw)
+// --- FONTE ---
+PFont henrique3Font;
+
+
+// --- INICIALIZAÇÃO ---
+
 void initHenrique3() {
     henrique3Frames = new PImage[HENRIQUE3_FRAME_COUNT];
 
@@ -68,6 +76,8 @@ void initHenrique3() {
     henrique3Ready = true;
 }
 
+// --- ESTRELAS ---
+
 void ensureHenrique3Stars(int cols, int rows) {
     if (henrique3StarMap != null && cols == henrique3StarCols && rows == henrique3StarRows) {
         return;
@@ -91,7 +101,26 @@ void ensureHenrique3Stars(int cols, int rows) {
     }
 }
 
-// Converter um PImage para ASCII e renderizar num buffer PGraphics
+
+// --- ATUALIZAÇÃO DE FRAME ---
+
+void updateHenrique3Frame(float amp, boolean beat) {
+    // Se o som estiver silencioso, manter o frame atual (pausa)
+    if (amp < henrique3SilenceThreshold) {
+        return;
+    }
+
+    // Avançar apenas com batida ou pico forte, com debounce
+    int now = millis();
+    if ((beat || amp >= henrique3SpikeThreshold) && (now - henrique3LastSwitchMs) >= henrique3MinSwitchIntervalMs) {
+        henrique3FrameIndex = (henrique3FrameIndex + 1) % HENRIQUE3_FRAME_COUNT;
+        henrique3CornerIndex = (henrique3CornerIndex + 1) % HENRIQUE3_CORNER_FRAME_COUNT;
+        henrique3LastSwitchMs = now;
+    }
+}
+
+// --- RENDER ASCII DA SILHUETA ---
+
 void renderAscii(PGraphics pg, PImage img, float amp, boolean beat) {
     if (img == null) {
         return;
@@ -206,6 +235,8 @@ void renderAscii(PGraphics pg, PImage img, float amp, boolean beat) {
     pg.endDraw();
 }
 
+// --- RENDER DOS CANTOS ---
+
 void drawHenrique3Corners(PGraphics pg, color cornerCol, color hoverCol, int visibleCount) {
     if (henrique3CornerFrames == null || henrique3CornerFrames.length == 0) return;
 
@@ -266,27 +297,15 @@ void renderCornerAscii(PGraphics pg, PImage img, int startX, int startY, int tar
     }
 }
 
-// Atualização de frame conduzida pelo áudio
-void updateHenrique3Frame(float amp, boolean beat) {
-    // Se o som estiver silencioso, manter o frame atual (pausa)
-    if (amp < henrique3SilenceThreshold) {
-        return;
-    }
-
-    // Avançar apenas com batida ou pico forte, com debounce
-    int now = millis();
-    if ((beat || amp >= henrique3SpikeThreshold) && (now - henrique3LastSwitchMs) >= henrique3MinSwitchIntervalMs) {
-        henrique3FrameIndex = (henrique3FrameIndex + 1) % HENRIQUE3_FRAME_COUNT;
-        henrique3CornerIndex = (henrique3CornerIndex + 1) % HENRIQUE3_CORNER_FRAME_COUNT;
-        henrique3LastSwitchMs = now;
-    }
-}
+// --- INPUT ---
 
 void henriqueLayer3KeyPressed() {
     if (key == 'g' || key == 'G') {
         henrique3CornerVisibleCount = (henrique3CornerVisibleCount + 1) % 5;
     }
 }
+
+// --- DESENHO PRINCIPAL ---
 
 void drawHenrique3(PGraphics pg, float amp, boolean beat){
     if (!henrique3Ready) {

@@ -5,31 +5,39 @@
         para conduzir o movimento e integra-se com a paleta dinâmica.
 */
 
-// Rampa de densidade ASCII para iluminação
-String densityRamp = ".,-~:;=!*#$@";
+// --- CONFIGURAÇÃO GERAL ---
+String densityRamp = ".,-~:;=!*#$@"; // rampa de densidade ASCII para iluminação
 
-// Configuração da grelha rígida
-int cellSize = 16;
+int cellSizeH2 = 16;
 int gridCols = 0;
 int gridRows = 0;
 
-// Parâmetros do toro (anel fino)
+// --- PARÂMETROS DO TORO ---
 float torusR = 0.7;   // major radius (smaller)
 float torusr = 0.2;   // minor radius (thin)
 
-// Estado de rotação
+// --- ESTADO DE ROTAÇÃO ---
 float rotA = 0.0;
 float rotB = 0.0;
 float rotVelA = 0.02;
 float rotVelB = 0.015;
 
-// Buffers de profundidade para a grelha ASCII
+// --- BUFFERS DA GRELHA ---
 float[] zBuffer;
 int[] shadeBuffer;
 
+// --- FONTE ---
+PFont henrique2Font;
+
+// --- GRELHA ---
+
 void ensureGrid(PGraphics pg) {
-    int newCols = pg.width / cellSize;
-    int newRows = pg.height / cellSize;
+    if (henrique2Font == null) {
+        henrique2Font = createFont("Courier", cellSizeH2, true);
+    }
+
+    int newCols = pg.width / cellSizeH2;
+    int newRows = pg.height / cellSizeH2;
     if (newCols != gridCols || newRows != gridRows) {
         gridCols = newCols;
         gridRows = newRows;
@@ -44,6 +52,8 @@ void clearGrid() {
         shadeBuffer[i] = 0;
     }
 }
+
+// --- DESENHO PRINCIPAL ---
 
 void drawHenrique2(PGraphics pg, float amp, boolean beat) {
     updatePalette();
@@ -132,7 +142,8 @@ void drawHenrique2(PGraphics pg, float amp, boolean beat) {
     pg.background(palette[3]);
     pg.colorMode(RGB, 255, 255, 255, 255);
     pg.textAlign(CENTER, CENTER);
-    pg.textSize(cellSize * 0.9);
+    pg.textFont(henrique2Font);
+    pg.textSize(cellSizeH2);
 
     color baseCol = paletteBlend(palettePhase);
     color beatCol = paletteBlend(palettePhase + 0.8);
@@ -144,8 +155,8 @@ void drawHenrique2(PGraphics pg, float amp, boolean beat) {
             if (zBuffer[idx] <= -1e8) continue;
 
             char glyph = densityRamp.charAt(shadeBuffer[idx]);
-            int x = col * cellSize + cellSize / 2;
-            int y = row * cellSize + cellSize / 2;
+            float x = col * cellSizeH2 + cellSizeH2 / 2;
+            float y = row * cellSizeH2 + cellSizeH2 / 2;
             pg.fill(beat ? beatCol : baseCol, 230);
             pg.text(glyph, x, y);
         }

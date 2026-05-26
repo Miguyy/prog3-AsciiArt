@@ -4,34 +4,43 @@
     transições suaves entre máscaras, reagindo ao áudio e ao rato. As letras
     mudam temporariamente perto do cursor e a cor varia com o movimento.
 */
-String[] words = {
-  "IPP", "ESMAD", "TDW", "TSIW", "DM", "TMD", "DI", "PM"
-};
 
+// --- CONFIGURAÇÃO GERAL ---
+String[] words = { "IPP", "ESMAD", "TDW", "TSIW", "DM", "TMD", "DI", "PM" };
 String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 String mutatePool = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+=-[]{}<>?/\\|";
 
+int cellSize = 16;
+PFont henrique1Font;
+boolean henrique1FontsLogged = false;
+
+// --- ESTADO DAS PALAVRAS ---
 boolean init = false;
 int wordIndex = 0;
 int nextWordIndex = 1;
 int wordStartMs = 0;
-int holdMs = 5000;
-int fadeMs = 1500;
+int holdMs = 5000;  // tempo que cada palavra fica visível
+int fadeMs = 1500;  // duração da transição entre palavras
+
+// --- MÁSCARAS ---
 PGraphics maskA;
 PGraphics maskB;
-PFont henrique1Font;
-boolean henrique1FontsLogged = false;
 
+// --- ESTADO DO RATO E PALETA ---
 int lastMouseX = -1;
 int lastMouseY = -1;
 int lastMoveMs = 0;
+float palettePhase = 0.0;
 float lockedHue = 200.0;
 float lockedSat = 70.0;
 float lockedBri = 90.0;
-float palettePhase = 0.0;
+
+// --- MUTAÇÃO DE GLIFOS ---
 IntDict mutateUntil;
 IntDict mutateChar;
-int mutateDecayMs = 350;
+int mutateDecayMs = 350;  // quanto tempo dura a mutação depois do rato sair
+
+// --- INICIALIZAÇÃO ---
 
 void initHenrique1() {
   wordIndex = 0;
@@ -48,7 +57,7 @@ void initHenrique1() {
   if (!henrique1FontsLogged) {
     henrique1FontsLogged = true;
   }
-  henrique1Font = createFont(selectHenrique1Font(), 48, true);
+  henrique1Font = createFont(selectHenrique1Font(), 16, true);
 }
 
 String selectHenrique1Font() {
@@ -56,14 +65,14 @@ String selectHenrique1Font() {
 }
 
 char randomAlphabetChar() {
-  int idx = int(random(alphabet.length()));
-  return alphabet.charAt(idx);
+  return alphabet.charAt(int(random(alphabet.length())));
 }
 
 char randomMutateChar() {
-  int idx = int(random(mutatePool.length()));
-  return mutatePool.charAt(idx);
+  return mutatePool.charAt(int(random(mutatePool.length())));
 }
+
+// --- PALETA REACTIVA AO RATO ---
 
 void updatePalette() {
   int now = millis();
@@ -85,6 +94,8 @@ color paletteBlend(float phase) {
   if (t < 2.0) return lerpColor(c2, c3, t - 1.0);
   return lerpColor(c3, c1, t - 2.0);
 }
+
+// --- MÁSCARAS DE TEXTO ---
 
 PGraphics renderWordMask(PGraphics mask, String word, float textSize) {
   if (mask == null || mask.width != width || mask.height != height) {
@@ -113,6 +124,8 @@ float sampleBlendAlpha(int x, int y, float fadeT) {
   int b = sampleMaskAlpha(maskB, x, y);
   return lerp(a, b, fadeT);
 }
+
+// --- DESENHO PRINCIPAL ---
 
 void drawHenrique1(PGraphics pg, float amp, boolean beat) {
   if (!init) initHenrique1();
@@ -145,10 +158,10 @@ void drawHenrique1(PGraphics pg, float amp, boolean beat) {
   maskB = renderWordMask(maskB, words[nextWordIndex], wordSize);
 
   // Grelha fixa para um layout rígido em matriz.
-  int cellSize = max(12, int(min(pg.width, pg.height) * 0.03));
+  
   int cols = pg.width / cellSize;
   int rows = pg.height / cellSize;
-  float glyphSize = cellSize * 0.85;
+  float glyphSize = 16;
 
   pg.textAlign(CENTER, CENTER);
   pg.textFont(henrique1Font);
@@ -162,11 +175,11 @@ void drawHenrique1(PGraphics pg, float amp, boolean beat) {
   for (int row = 0; row < rows; row++) {
     for (int col = 0; col < cols; col++) {
       // Coordenadas fixas da matriz: cada célula mapeia para o centro exato.
-      int x = col * cellSize + cellSize / 2;
-      int y = row * cellSize + cellSize / 2;
+      float x = col * cellSize + cellSize / 2.0;
+      float y = row * cellSize + cellSize / 2.0;
 
-      float alpha = sampleBlendAlpha(x, y, fadeT);
-      if (alpha <= 10) continue;
+      float alpha = sampleBlendAlpha(int(x), int(y), fadeT);
+      if (alpha <= 128) continue;
 
       int key = row * 10000 + col;
       float mouseDist = dist(mouseX, mouseY, x, y);
@@ -198,5 +211,3 @@ void drawHenrique1(PGraphics pg, float amp, boolean beat) {
 
   pg.endDraw();
 }
-
-		

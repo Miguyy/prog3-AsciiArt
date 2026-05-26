@@ -14,7 +14,7 @@ char[] sequencia1 = {'.', ',', '*', 'x', '#', '1', '0', '░', '='};
 class LetraInput {
   char original;     // O caractere que o utilizador escreveu
   int fase = 0;      // Em que ponto da dissolução está (0 = início)
-  int delay = 60;   // Frames até começar a dissolver
+  int delay = 30;   // Frames até começar a dissolver
 
   LetraInput(char c) {
     original = c;
@@ -176,7 +176,8 @@ boolean desenharInputUtilizador(PGraphics pg, String[] linhasVisiveis,
 
 void desenharFundoReativo(PGraphics pg, float x, float y, float amplitude, boolean batida) {
   if (batida) {
-    pg.fill(palette[1]);
+    color c = lerpColor(palette[1], palette[2], amplitude);
+    pg.fill(c);
     pg.text(sequencia1[int(random(sequencia1.length))], x, y);
   } else {
     pg.fill(palette[2]);
