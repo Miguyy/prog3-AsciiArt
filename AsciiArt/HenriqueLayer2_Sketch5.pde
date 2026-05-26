@@ -129,7 +129,7 @@ void drawHenrique2(PGraphics pg, float amp, boolean beat) {
     }
 
     pg.beginDraw();
-    pg.clear();
+    pg.background(palette[3]);
     pg.colorMode(RGB, 255, 255, 255, 255);
     pg.textAlign(CENTER, CENTER);
     pg.textSize(cellSize * 0.9);

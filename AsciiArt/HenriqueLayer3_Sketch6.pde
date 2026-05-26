@@ -100,7 +100,7 @@ void renderAscii(PGraphics pg, PImage img, float amp, boolean beat) {
     img.loadPixels();
 
     pg.beginDraw();
-    pg.background(0); // preto puro, sem texto de fundo
+    pg.background(palette[3]);
     pg.textFont(henrique3Font);
     pg.textAlign(LEFT, TOP);
     pg.colorMode(RGB, 255, 255, 255, 255);

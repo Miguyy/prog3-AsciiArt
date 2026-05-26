@@ -119,6 +119,7 @@ void drawHenrique1(PGraphics pg, float amp, boolean beat) {
 
   pg.beginDraw();
   pg.clear();
+  pg.background(palette[3]);
 
   int now = millis();
   int elapsed = now - wordStartMs;

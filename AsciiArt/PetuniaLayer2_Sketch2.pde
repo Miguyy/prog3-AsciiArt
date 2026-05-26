@@ -23,7 +23,7 @@ void drawPetunia2(PGraphics pg, float amplitude, boolean batida) {
   float velocidadeRato = dist(mouseX, mouseY, pmouseX, pmouseY);
 
   pg.beginDraw();
-  pg.background(0);
+  pg.background(palette[3]);
   pg.textFont(fonte2);
   pg.textSize(tamFonte2);
   pg.textAlign(CENTER, CENTER);

@@ -71,7 +71,7 @@ void drawPetunia1(PGraphics pg, float amplitude, boolean batida) {
   avançarTextoSistema();
 
   pg.beginDraw();
-  pg.clear();
+  pg.background(palette[3]);
   pg.textFont(fonte);
   pg.textSize(tamFonte);
   pg.textAlign(CENTER, CENTER);
