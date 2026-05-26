@@ -163,7 +163,6 @@ void renderHUD(){
   textAlign(LEFT, TOP);
   text("Frequency", startX, startY - 24);
   popStyle();
-};
 
   // Mudar entre as layers com as teclas '1'..'9'
   if (key >= '1' && key <= '9') {
@@ -184,6 +183,7 @@ void renderHUD(){
       else music.play();
     }
   }
+
   // Chamar funções de keyPressed específicas de cada layer, se existirem
   try {
     keyPressed_p1();
