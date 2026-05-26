@@ -1,17 +1,27 @@
 /*
     Propósito:
-    - Desenhra uma grelha de caracteres ASCII em `PGraphics`, com linhas alternadas
-        para criar movimento visual.
-    - A animação é conduzida pelo analisador FFT e pela amplitude global, e
-        responde a batidas (flag `beat`) para variações de cor/ritmo.
-    - Suporta apagamento (wipe) por linha: pedidos manuais com 'e', modo
-        auto-sequencial com 'E' e reset com 'r'. O estado apagado é cacheado por
-        célula para persistência entre frames.
-    - Ajusta dinamicamente o tamanho da fonte e o layout (colunas/linhas) quando
-        a dimensão do `PGraphics` muda, para manter a legibilidade.
-    - Integrado com o sketch principal (`AsciiArt.pde`): a função
-        `drawMiguel1(PGraphics, float, boolean)` é chamada por `draw()` e o
-        `miguelLayer1KeyPressed()` é invocado a partir de `keyPressed()`.
+        Renderizar uma grelha ASCII com linhas alternadas para criar movimento
+        visual; suporta wipe/apagamento de linhas, cache de estado apagado e
+        adaptação dinâmica de fonte/colunas quando o `PGraphics` muda de dimensão.
+
+    Variáveis principais:
+        - ML7_chars: sequência de carateres usados na grelha.
+        - ML7_font, ML7_fontSize, ML7_cachedW/H: gestão e cache da fonte.
+        - ML7_erased: matriz booleana que armazena células permanentemente apagadas.
+        - ML7_erasing / ML7_pendingErase / ML7_autoEraseMode: flags e estados de apagamento.
+        - ML7_spectrum: buffer para análise FFT local.
+
+    Funções expostas:
+        - drawMiguel1(PGraphics pg, float amp, boolean beat)
+        - miguelLayer1KeyPressed() — handler para 'e', 'E' e 'r'
+
+    Uso da paleta:
+        - Fundo: `palette[3]`; texto por defeito: `palette[5]`; variações de cor com base em frequência.
+
+    Controlo / Keys:
+        - 'e' → pedir apagamento de uma linha (incremental)
+        - 'E' → alternar modo de apagamento automático sequencial
+        - 'r' → reset do estado de apagamento
 */
 
 // Mapa de caracteres utilizados na grelha ASCII

@@ -1,8 +1,29 @@
 /*
     Propósito:
         Converter uma sequência de frames em silhuetas ASCII reativas ao áudio.
-        A animação avança com batidas/picos e pausa no silêncio, enquanto o rato
-        provoca variações locais nos glifos e no brilho.
+        A layer avança frames em resposta a batidas/picos e pausa no silêncio;
+        o rato provoca variações locais nos glifos e no brilho, e existem frames
+        para cantos (corner frames) e efeitos estelares.
+
+    Variáveis principais:
+        - ASCII_RAMP: rampa de caracteres por densidade.
+        - HENRIQUE3_FRAME_COUNT / CORNER_FRAME_COUNT: contagem de frames carregados.
+        - henrique3Frames / henrique3CornerFrames: arrays de `PImage` com os frames.
+        - henrique3StarMap / henrique3StarGlow: dados das estrelas distribuídas na grelha.
+        - henrique3Font, henrique3CharSize: fonte e métricas da grelha ASCII.
+        - thresholds de áudio: henrique3SilenceThreshold, henrique3SpikeThreshold, henrique3MinSwitchIntervalMs.
+
+    Funções expostas:
+        - initHenrique3() — carregar frames e inicializar recursos.
+        - updateHenrique3Frame(float amp, boolean beat) — lógica de avanço condicionado ao áudio.
+        - renderAscii(PGraphics pg, PImage img, float amp, boolean beat) — render da silhueta em ASCII.
+        - drawHenrique3(PGraphics pg, float amp, boolean beat) — combinação e desenho final.
+
+    Uso da paleta:
+        - `palette[3]` para o fundo; `paletteBlend()` para variações de cor e hover.
+
+    Controlo / Keys:
+        - Sem handler de teclado local obrigatório; consumo de eventos delegado por `AsciiArt.pde`.
 */
 
 // --- CONFIGURAÇÃO GERAL ---

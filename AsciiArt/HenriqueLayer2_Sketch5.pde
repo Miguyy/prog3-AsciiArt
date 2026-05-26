@@ -1,8 +1,27 @@
 /*
     Propósito:
-        Desenhar um toro ASCII numa grelha rígida com shading por iluminação,
-        reagindo ao áudio para rotação e pulsação. Usa a análise de áudio existente
-        para conduzir o movimento e integra-se com a paleta dinâmica.
+        Renderizar um toro (torus) em 3D mapeado para uma grelha ASCII rígida,
+        com shading baseado na normal da superfície. A rotação e a pulsação são
+        conduzidas por analisadores de áudio (FFT / amplitude / beat).
+
+    Variáveis principais:
+        - densityRamp: string com caracteres ordenados por densidade para shading.
+        - cellSizeH2, gridCols, gridRows: métricas da grelha ASCII.
+        - torusR, torusr: parâmetros geométricos do toro.
+        - rotA, rotB, rotVelA, rotVelB: estado e velocidade de rotação.
+        - zBuffer, shadeBuffer: buffers para projeto e shading por célula.
+        - henrique2Font: fonte monoespaçada usada para desenhar glyphs.
+
+    Funções expostas:
+        - ensureGrid(PGraphics pg) — recria buffers quando o tamanho do `PGraphics` muda.
+        - clearGrid() — inicializa `zBuffer`/`shadeBuffer`.
+        - drawHenrique2(PGraphics pg, float amp, boolean beat) — render principal.
+
+    Uso da paleta:
+        - Usar `paletteBlend(palettePhase)` e `palette[...]` para cor base e cor de batida.
+
+    Controlo / Keys:
+        - Sem handler de teclado local; reatividade principal por áudio e parâmetro `beat`.
 */
 
 // --- CONFIGURAÇÃO GERAL ---

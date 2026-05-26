@@ -426,21 +426,15 @@ Referências Visuais:
 ## 1ª layer do Miguel Sketch7:
 
 Animaçao de typing, seguida de uma transiçao tipo comboio que limpa o que esta a ser escrito
-
 Interação: N/A
-
 Reação ao som: As letras correm mais rapido com a frequencia
-
 Referências Visuais: https://play.ertdfgcvb.xyz/#/src/basics/rendering_to_canvas
 
 ## 2ª layer do Miguel Sketch8:
 
 Espécie de gradiente com círculos que se fundem, a tela está completamente cheia de caracteres. Os círculos são mais ou menos como nas imagens. Basicamente é uma mistura dos exemplos.
-
 Interação: fusão dos círculos com o mouse ou manipulação da posição
-
 Reação ao som: Cículos aumentam ou dimuem de acordo com a frequência da música
-
 Referências Visuais:
 
 - https://pt.pinterest.com/pin/1064819905637388180/
@@ -451,10 +445,3 @@ Referências Visuais:
 
 Reação ao som: Criar uma representação visual do Sistema Solar usando arte ASCII, onde cada planeta é desenhado como uma esfera rotativa composta por caracteres, com texturas reativas ao áudio.
 O utilizador pode navegar entre os planetas usando as setas esquerda/direita, e cada planeta tem características visuais distintas baseadas em suas propriedades astronómicas e reatividade ao som.
-
----
-
-## Controls (Miguel Layer 1)
-
-- **Space:** Toggle music play / pause. Pressing space will stop the soundtrack when playing, and resume it when pressed again.
-- **M:** Toggle microphone input. Pressing `M` switches to the microphone (when music is stopped or when you want live voice input) and the sketch will react to the microphone amplitude/FFT. Press `M` again to stop the microphone and return control to the music.

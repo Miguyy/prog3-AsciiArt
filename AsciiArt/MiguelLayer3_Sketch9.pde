@@ -1,7 +1,25 @@
 /*
   Propósito:
-    Criar uma representação visual do Sistema Solar usando arte ASCII, onde cada planeta é desenhado como uma esfera rotativa composta por caracteres, com texturas reativas ao áudio. 
-    O utilizador pode navegar entre os planetas usando as setas esquerda/direita, e cada planeta tem características visuais distintas baseadas em suas propriedades astronómicas e reatividade ao som.
+    Representação do Sistema Solar em arte ASCII; cada planeta é desenhado como
+    esfera rotativa composta por caracteres, com texturas reativas ao áudio.
+    O utilizador navega entre os planetas com as setas esquerda/direita.
+
+  Variáveis principais:
+    - columns, lines: dimensões da grelha ASCII em células.
+    - font_size, fon: dimensão e fonte usada para desenhar caracteres.
+    - characters: array de caracteres usados por ordem de densidade.
+    - currentPlanet, planetRotation: estado de navegação e rotação.
+    - starMap, starGlow, starRot, starRotSpeed, starSize: dados do campo estelar.
+
+  Funções expostas:
+    - drawMiguel3(PGraphics pg, float amp, boolean beat)
+    - miguelLayer3KeyPressed() — navegação por `RIGHT` / `LEFT`.
+
+  Uso da paleta:
+    - Fundo: `palette[3]`; usar `palette[8]` e `palette[2]` para planetas e decorações.
+
+  Controlo / Keys:
+    - `RIGHT` / `LEFT` (teclas codificadas) para mudar o planeta ativo.
 */
 
 int columns, lines;

@@ -1,4 +1,24 @@
-// In PetuniaLayer2_Sketch2.pde
+/*
+  Propósito:
+    Geração de uma onda diagonal textural que reage à amplitude sonora e ao
+    movimento do rato; preenche uma grelha ASCII com níveis de detalhe.
+
+  Variáveis principais:
+    - tamFonte2, fonte2: métricas de fonte e grelha.
+    - tempo2: tempo interno que avança com a amplitude para modular o efeito.
+    - characters2: sequência de caracteres ASCII ordenados por densidade.
+
+  Funções expostas:
+    - drawPetunia2(PGraphics pg, float amplitude, boolean batida)
+    - calcularCaractere(int col, int linha, float amplitude, float velocidadeRato)
+
+  Uso da paleta:
+    - Desenhar caracteres com `palette[7]` ou `palette[2]` conforme contraste.
+
+  Controlo / Keys:
+    - sem handler global; responder aos eventos enviados por `AsciiArt.pde`.
+*/
+
 // --- CONFIGURAÇÃO GERAL ---
 
 int tamFonte2 = 16;

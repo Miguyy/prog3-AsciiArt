@@ -1,8 +1,28 @@
 /*
   Propósito:
-    Criar uma grelha ASCII rígida que revela palavras (IPP, ESMAD, etc.) com
-    transições suaves entre máscaras, reagindo ao áudio e ao rato. As letras
-    mudam temporariamente perto do cursor e a cor varia com o movimento.
+    Grelha ASCII rígida que revela palavras (por exemplo IPP, ESMAD) através de
+    máscaras; suporta transições suaves entre máscaras, mutações temporárias
+    de glifos perto do cursor e variação de cor com movimento.
+
+  Variáveis principais:
+    - words, alphabet, mutatePool: conteúdo e conjunto de caracteres para mutação.
+    - cellSize: dimensão da célula da grelha.
+    - maskA, maskB: `PGraphics` usados como máscaras de texto para blend.
+    - mutateUntil, mutateChar: estruturas para controlar mutações temporais.
+    - henrique1Font: fonte monoespaçada usada para desenhar os glifos.
+
+  Funções expostas:
+    - initHenrique1() — inicializa estado e recursos.
+    - drawHenrique1(PGraphics pg, float amp, boolean beat) — render principal.
+    - renderWordMask(PGraphics mask, String word, float textSize)
+    - sampleMaskAlpha(PGraphics mask, int x, int y)
+    - sampleBlendAlpha(int x, int y, float fadeT)
+
+  Uso da paleta:
+    - utilizar `paletteBlend(palettePhase)` e `palette[...]` para cores base, batida e hover.
+
+  Controlo / Keys:
+    - reatividade ao rato (posicionamento e mutações) e ao áudio (tamanho/escala das palavras).
 */
 
 // --- CONFIGURAÇÃO GERAL ---

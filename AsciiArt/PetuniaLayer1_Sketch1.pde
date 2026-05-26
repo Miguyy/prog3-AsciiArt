@@ -1,4 +1,26 @@
-// In PetuniaLayer1_Sketch1.pde
+/*
+  Propósito:
+    Terminal/efeito textural que mostra linhas de sistema simuladas e aceita
+    input do utilizador. As letras do input dissolvem-se ao longo do tempo.
+
+  Variáveis principais:
+    - tamFonte, numColunas, numLinhas: métricas de grelha e fonte.
+    - fonte: fonte monoespaçada usada na layer.
+    - inputUtilizador: lista de `LetraInput` que armazena caracteres digitados.
+    - linhasSistema: mensagens do sistema exibidas progressivamente.
+
+  Funções expostas ao sketch principal:
+    - drawPetunia1(PGraphics pg, float amplitude, boolean batida)
+    - keyPressed_p1() — handler de teclado específico da layer
+    - resetLayer1() — reinicia o estado da layer
+
+  Uso da paleta:
+    - Usar `palette[index]` proveniente de `AsciiArt.pde` para manter coerência.
+
+  Controlo / Keys:
+    - BACKSPACE, ENTER, caracteres imprimíveis: edição do terminal local.
+*/
+
 // --- CONFIGURAÇÃO GERAL ---
 
 int tamFonte = 16;

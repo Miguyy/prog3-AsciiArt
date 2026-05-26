@@ -1,4 +1,26 @@
-// In PetuniaLayer3_Sketch3.pde
+/*
+  Propósito:
+    Projeção 3D de um cubo em grelha ASCII; desenha vértices e arestas como
+    caracteres numa grelha, com rotação controlada pelo rato e reatividade ao áudio.
+
+  Variáveis principais:
+    - tamFonte3, numColunas3, numLinhas3, fonte3: parâmetros de grelha e fonte.
+    - anguloX, anguloY, distanciaCamara: estado da câmara/projeção.
+    - arestas: ligação entre vértices para desenhar linhas.
+
+  Funções expostas:
+    - drawPetunia3(PGraphics pg, float amplitude, boolean batida)
+    - projetarVertices(PGraphics pg, float s)
+    - desenharGrelha(PGraphics pg)
+    - desenharArestas(PGraphics pg)
+
+  Uso da paleta:
+    - `palette[3]` para fundo; `palette[8]` e `palette[2]` para vértices/arestas.
+
+  Controlo / Keys:
+    - interação por rato (posicionamento da rotação através de `mouseX/mouseY`).
+*/
+
 // --- CONFIGURAÇÃO GERAL ---
 
 int tamFonte3 = 16;

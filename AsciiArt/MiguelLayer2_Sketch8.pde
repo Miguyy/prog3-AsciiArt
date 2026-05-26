@@ -1,8 +1,28 @@
-/* 
-  Propósito: Criar uma camada de arte ASCII dinâmica e fluida que reage ao áudio, com formas orgânicas que se movem para cima, 
-  controladas por um sistema de 'blobs' e uma onda vertical modulada por frequências altas. 
-  O blob principal segue o rato, expandindo-se com o áudio e as batidas, enquanto os blobs de fundo flutuam para cima com variações de raio. 
-  A grelha ASCII é desenhada usando SDF para formas suaves, com deslocamentos baseados em ruído para um efeito fluido e orgânico.
+/*
+  Propósito:
+    Camada orgânica de arte ASCII baseada em 'blobs' que se movem para cima;
+    o blob principal segue o rato e expande com o áudio e batidas; blobs de
+    background flutuam para cima com variações de raio. A grelha usa SDF para
+    formas suaves e ruído para deslocamentos fluidos.
+
+  Variáveis principais:
+    - m2DensityChars: caracteres ordenados por densidade.
+    - m2Blobs, m2BasePos, m2BaseRadius, m2Radius: dados dos blobs e raios.
+    - m2CellSize, m2Smoothness: parâmetros da grelha e suavidade da união SDF.
+    - m2WaveYTime, m2BeatPulse: tempo da onda e pulso de batida.
+    - m2Font: fonte monoespaçada usada para desenhar os caracteres.
+
+  Funções expostas:
+    - initMiguel2() — inicializa blobs e fontes.
+    - drawMiguel2(PGraphics pg, float amplitude, boolean beatDetected) — render principal.
+    - sdCircle(), opSmoothUnion() — utilitárias SDF.
+    - miguelLayer2KeyPressed() — handler para 'r' (randomizar blobs).
+
+  Uso da paleta:
+    - Fundo: `palette[3]`; cores de glyph usam `palette[5]`, `palette[8]` e `palette[2]` consoante intensidade.
+
+  Controlo / Keys:
+    - 'r' → randomizar posições e raios dos blobs de fundo.
 */
 
 // 1. Configuração: caracteres ASCII e parâmetros de grelha
