@@ -117,7 +117,7 @@ void draw() {
   // HUD (frequências / diagnóstico) — opcional
   if (showHUD) renderHUD();
 
-  // saveFrame("frames/frame-####.png"); // Need to remove the comment to save frames for the video
+  saveFrame("frames/frame-####.png"); // Need to remove the comment to save frames for the video
 }
 
 // renderHUD()
