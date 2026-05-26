@@ -1,4 +1,4 @@
-# AsciiArt — Sketch Generativo e Reativo ao Som
+# AsciiArt  
 
 ## Resumo
 
