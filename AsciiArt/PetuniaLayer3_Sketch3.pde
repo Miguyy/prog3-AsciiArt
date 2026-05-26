@@ -70,13 +70,13 @@ void projetarVertices(PGraphics pg, float s) {
     float z = vertices[i][2];
 
     // Rotação em Y (esquerda/direita com o rato)
-    float x1 =  x * cos(anguloY) + z * sin(anguloY);
-    float z1 = -x * sin(anguloY) + z * cos(anguloY);
+    float x1 =  x * cos(anguloY) - z * sin(anguloY);
+    float z1 =  x * sin(anguloY) + z * cos(anguloY);
 
     // Rotação em X (cima/baixo com o rato)
-    float y2 = y * cos(anguloX) - z1 * sin(anguloX);
-    float z2 = y * sin(anguloX) + z1 * cos(anguloX);
-
+    float y2 = y * cos(anguloX) + z1 * sin(anguloX);
+    float z2 = -y * sin(anguloX) + z1 * cos(anguloX);
+    
     // Projeção perspetiva
     float escala = distanciaCamara / (distanciaCamara + z2);
     verticesEcra[i][0] = (pg.width  / 2) + (x1 * escala);
