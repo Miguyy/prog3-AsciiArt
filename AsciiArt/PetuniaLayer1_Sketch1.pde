@@ -14,7 +14,7 @@ char[] sequencia1 = {'.', ',', '*', 'x', '#', '1', '0', '░', '='};
 class LetraInput {
   char original;     // O caractere que o utilizador escreveu
   int fase = 0;      // Em que ponto da dissolução está (0 = início)
-  int delay = 60;   // Frames até começar a dissolver
+  int delay = 30;   // Frames até começar a dissolver
 
   LetraInput(char c) {
     original = c;

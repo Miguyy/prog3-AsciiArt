@@ -4,34 +4,43 @@
     transições suaves entre máscaras, reagindo ao áudio e ao rato. As letras
     mudam temporariamente perto do cursor e a cor varia com o movimento.
 */
-String[] words = {
-  "IPP", "ESMAD", "TDW", "TSIW", "DM", "TMD", "DI", "PM"
-};
 
+// --- CONFIGURAÇÃO GERAL ---
+String[] words = { "IPP", "ESMAD", "TDW", "TSIW", "DM", "TMD", "DI", "PM" };
 String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 String mutatePool = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+=-[]{}<>?/\\|";
 
+int cellSize = 16;
+PFont henrique1Font;
+boolean henrique1FontsLogged = false;
+
+// --- ESTADO DAS PALAVRAS ---
 boolean init = false;
 int wordIndex = 0;
 int nextWordIndex = 1;
 int wordStartMs = 0;
-int holdMs = 5000;
-int fadeMs = 1500;
+int holdMs = 5000;  // tempo que cada palavra fica visível
+int fadeMs = 1500;  // duração da transição entre palavras
+
+// --- MÁSCARAS ---
 PGraphics maskA;
 PGraphics maskB;
-PFont henrique1Font;
-boolean henrique1FontsLogged = false;
 
+// --- ESTADO DO RATO E PALETA ---
 int lastMouseX = -1;
 int lastMouseY = -1;
 int lastMoveMs = 0;
+float palettePhase = 0.0;
 float lockedHue = 200.0;
 float lockedSat = 70.0;
 float lockedBri = 90.0;
-float palettePhase = 0.0;
+
+// --- MUTAÇÃO DE GLIFOS ---
 IntDict mutateUntil;
 IntDict mutateChar;
-int mutateDecayMs = 350;
+int mutateDecayMs = 350;  // quanto tempo dura a mutação depois do rato sair
+
+// --- INICIALIZAÇÃO ---
 
 void initHenrique1() {
   wordIndex = 0;
@@ -56,14 +65,14 @@ String selectHenrique1Font() {
 }
 
 char randomAlphabetChar() {
-  int idx = int(random(alphabet.length()));
-  return alphabet.charAt(idx);
+  return alphabet.charAt(int(random(alphabet.length())));
 }
 
 char randomMutateChar() {
-  int idx = int(random(mutatePool.length()));
-  return mutatePool.charAt(idx);
+  return mutatePool.charAt(int(random(mutatePool.length())));
 }
+
+// --- PALETA REACTIVA AO RATO ---
 
 void updatePalette() {
   int now = millis();
@@ -85,6 +94,8 @@ color paletteBlend(float phase) {
   if (t < 2.0) return lerpColor(c2, c3, t - 1.0);
   return lerpColor(c3, c1, t - 2.0);
 }
+
+// --- MÁSCARAS DE TEXTO ---
 
 PGraphics renderWordMask(PGraphics mask, String word, float textSize) {
   if (mask == null || mask.width != width || mask.height != height) {
@@ -113,6 +124,8 @@ float sampleBlendAlpha(int x, int y, float fadeT) {
   int b = sampleMaskAlpha(maskB, x, y);
   return lerp(a, b, fadeT);
 }
+
+// --- DESENHO PRINCIPAL ---
 
 void drawHenrique1(PGraphics pg, float amp, boolean beat) {
   if (!init) initHenrique1();
@@ -145,7 +158,7 @@ void drawHenrique1(PGraphics pg, float amp, boolean beat) {
   maskB = renderWordMask(maskB, words[nextWordIndex], wordSize);
 
   // Grelha fixa para um layout rígido em matriz.
-  int cellSize = 16;
+  
   int cols = pg.width / cellSize;
   int rows = pg.height / cellSize;
   float glyphSize = 16;
