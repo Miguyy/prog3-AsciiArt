@@ -163,6 +163,9 @@ void renderHUD(){
   textAlign(LEFT, TOP);
   text("Frequency", startX, startY - 24);
   popStyle();
+}
+
+void keyPressed() {
 
   // Mudar entre as layers com as teclas '1'..'9'
   if (key >= '1' && key <= '9') {
@@ -174,6 +177,7 @@ void renderHUD(){
       resetLayer1(); 
     }
   }
+
   // m → alternar entre usar o ficheiro de música e o microfone como fonte de áudio
   if (key == 'm' || key == 'M') changeAudioFont();
   // space → pausar/resumir música (funciona apenas quando a fonte é o ficheiro, não o mic)
@@ -185,31 +189,16 @@ void renderHUD(){
   }
 
   // Chamar funções de keyPressed específicas de cada layer, se existirem
-  try {
-    keyPressed_p1();
-  } catch (Exception e) {
-    // Ignora se a função não existir 
-  }
-  
-  try {
-    miguelLayer1KeyPressed();
-  } catch (Exception e) {
-    // Ignora se a função não existir 
-  }
-  try {
-    miguelLayer2KeyPressed();
-  } catch (Exception e) {
-    // Ignora se a função não existir 
-  }
-  try {
-    miguelLayer3KeyPressed();
-  } catch (Exception e) {
-    // Ignora se a função não existir 
-  }
-  try {
-    henriqueLayer3KeyPressed();
-  } catch (Exception e) {
-    // Ignora se a função não existir 
+  if (layerOn[0]) {
+    try { keyPressed_p1(); } catch (Exception e) {}
+    try { miguelLayer1KeyPressed(); } catch (Exception e) {}
+  } 
+  else if (layerOn[1]) {
+    try { miguelLayer2KeyPressed(); } catch (Exception e) {}
+  } 
+  else if (layerOn[2]) {
+    try { miguelLayer3KeyPressed(); } catch (Exception e) {}
+    try { henriqueLayer3KeyPressed(); } catch (Exception e) {}
   }
   //  Esconde HUD
   if (key == 'h' || key == 'H') showHUD = !showHUD;
