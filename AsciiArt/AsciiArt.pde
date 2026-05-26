@@ -165,12 +165,14 @@ void renderHUD(){
   popStyle();
 };
 
-void keyPressed() {
   // Mudar entre as layers com as teclas '1'..'9'
   if (key >= '1' && key <= '9') {
     int idx = key - '1';
     for (int i = 0; i < layerOn.length; i++) {
       layerOn[i] = (i == idx);
+    }
+    if (key == '1' && layerOn[0]) {
+      resetLayer1(); 
     }
   }
   // m → alternar entre usar o ficheiro de música e o microfone como fonte de áudio
@@ -182,7 +184,13 @@ void keyPressed() {
       else music.play();
     }
   }
-  // Chamar funções de keyPressed específicas de cada layer, se existirem 
+  // Chamar funções de keyPressed específicas de cada layer, se existirem
+  try {
+    keyPressed_p1();
+  } catch (Exception e) {
+    // Ignora se a função não existir 
+  }
+  
   try {
     miguelLayer1KeyPressed();
   } catch (Exception e) {
