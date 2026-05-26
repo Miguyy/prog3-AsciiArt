@@ -188,17 +188,26 @@ void keyPressed() {
     }
   }
 
-  // Chamar funções de keyPressed específicas de cada layer, se existirem
+  // Chamar funções de keyPressed específicas de cada layer (mapeamento por índice):
+  // indices: 0-2 = Petúnia, 3-5 = Henrique, 6-8 = Miguel
   if (layerOn[0]) {
     try { keyPressed_p1(); } catch (Exception e) {}
-    try { miguelLayer1KeyPressed(); } catch (Exception e) {}
-  } 
-  else if (layerOn[1]) {
-    try { miguelLayer2KeyPressed(); } catch (Exception e) {}
-  } 
-  else if (layerOn[2]) {
-    try { miguelLayer3KeyPressed(); } catch (Exception e) {}
+  } else if (layerOn[1]) {
+    // Petúnia layer 2: no handler implemented (skip)
+  } else if (layerOn[2]) {
+    // Petúnia layer 3: no handler implemented (skip)
+  } else if (layerOn[3]) {
+    // Henrique layer 1: no handler implemented (skip)
+  } else if (layerOn[4]) {
+    // Henrique layer 2: no handler implemented (skip)
+  } else if (layerOn[5]) {
     try { henriqueLayer3KeyPressed(); } catch (Exception e) {}
+  } else if (layerOn[6]) {
+    try { miguelLayer1KeyPressed(); } catch (Exception e) {}
+  } else if (layerOn[7]) {
+    try { miguelLayer2KeyPressed(); } catch (Exception e) {}
+  } else if (layerOn[8]) {
+    try { miguelLayer3KeyPressed(); } catch (Exception e) {}
   }
   //  Esconde HUD
   if (key == 'h' || key == 'H') showHUD = !showHUD;
