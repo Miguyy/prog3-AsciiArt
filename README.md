@@ -1,76 +1,77 @@
-# AsciiArt  
+# AsciiArt
 
-## Resumo
+## Overview
 
-Projeto académico desenvolvido em Processing (Java mode) para a unidade curricular Programação III (ESMAD - P.Porto). O sketch combina várias camadas de arte ASCII e gráficas, reativas ao som (ficheiro de áudio e microfone), com o objetivo de gerar imagens/frames para um vídeo final.
+Academic project developed in Processing (Java mode) for the Programming III course (ESMAD - P.Porto). The sketch combines multiple layers of ASCII and graphical art, reactive to audio input (audio file and microphone), with the goal of generating images/frames for a final video.
 
-## Características principais
+## Main Features
 
-- 9 layers independentes (3 por cada autor: Petúnia, Henrique, Miguel), cada uma a desenhar para um `PGraphics` próprio.
-- Entrada de áudio: `SoundFile` (ficha `PhylypsTrak.mp3`) e `AudioIn` (microfone). Analisadores: `Amplitude`, `FFT` e `BeatDetector`.
-- Paleta global (`color[] palette`) definida em `AsciiArt.pde` - todas as layers devem reutilizá-la para coerência.
-- Export de frames via `saveFrame("frames/frame-####.png")` para composição de vídeo.
+- 9 independent layers (3 per author: Petúnia, Henrique, Miguel), each drawing to its own `PGraphics`.
+- Audio input: `SoundFile` (`PhylypsTrak.mp3`) and `AudioIn` (microphone). Analyzers: `Amplitude`, `FFT`, and `BeatDetector`.
+- Global color palette (`color[] palette`) defined in `AsciiArt.pde` — all layers should reuse it for consistency.
+- Frame export via `saveFrame("frames/frame-####.png")` for video composition.
 
-## Estrutura do repositório
+## Repository Structure
 
-- `AsciiArt/` — pasta do sketch (nome deve coincidir com ficheiro principal `AsciiArt.pde`)
-  - `AsciiArt.pde` — ficheiro principal: setup, composição, paleta, inputs.
-  - `Audio.pde` — inicialização de `SoundFile`, `AudioIn`, `Amplitude`, `FFT` e `BeatDetector`.
+- `AsciiArt/` — sketch folder (the folder name must match the main file `AsciiArt.pde`)
+  - `AsciiArt.pde` — main file: setup, composition, palette, inputs.
+  - `Audio.pde` — initialization of `SoundFile`, `AudioIn`, `Amplitude`, `FFT`, and `BeatDetector`.
   - `PetuniaLayer1_Sketch1.pde`, `PetuniaLayer2_Sketch2.pde`, `PetuniaLayer3_Sketch3.pde`
   - `HenriqueLayer1_Sketch4.pde`, `HenriqueLayer2_Sketch5.pde`, `HenriqueLayer3_Sketch6.pde`
   - `MiguelLayer1_Sketch7.pde`, `MiguelLayer2_Sketch8.pde`, `MiguelLayer3_Sketch9.pde`
-  - `data/` — recursos: audio (`PhylypsTrak.mp3`), fontes, imagens.
-  - `frames/` — saída de `saveFrame()` (guardar imagens sequenciais para vídeo).
+  - `data/` — resources: audio (`PhylypsTrak.mp3`), fonts, images.
+  - `frames/` — output from `saveFrame()` (stores sequential images for video creation).
 
-## Requisitos
+## Requirements
 
 - Processing 4 (Java mode)
-- Biblioteca `processing.sound` (incluída com Processing) - para `SoundFile`, `AudioIn`, `Amplitude`, `FFT` e `BeatDetector`.
-- Resolução alvo: 1920×1080 (FullHD)
+- `processing.sound` library (included with Processing) — required for `SoundFile`, `AudioIn`, `Amplitude`, `FFT`, and `BeatDetector`.
+- Target resolution: 1920×1080 (Full HD)
 
-## Como executar
+## How to Run
 
-1. Coloque `PhylypsTrak.mp3` em `AsciiArt/data/`.
-2. Abra a pasta `AsciiArt` no Processing (abrir `AsciiArt.pde`).
-3. Execute o sketch (`Run`).
+1. Place `PhylypsTrak.mp3` inside `AsciiArt/data/`.
+2. Open the `AsciiArt` folder in Processing (open `AsciiArt.pde`).
+3. Run the sketch (`Run`).
 
-## Controlo em runtime
+## Runtime Controls
 
-- `1`..`9`: alternar qual layer está visível (cada tecla torna activa uma layer — o sketch está desenhado para que apenas uma layer esteja visível por predefinição)
-- `m`: alternar entre ficheiro de música e microfone como fonte de áudio
-- `space`: pausar / retomar reprodução do ficheiro (quando `useMic == false`)
-- `h`: alternar HUD de diagnóstico (espectro)
+- `1`..`9`: switch which layer is visible (each key activates a layer — the sketch is designed so that only one layer is visible by default)
+- `m`: switch between the music file and microphone as the audio source
+- `space`: pause / resume audio file playback (when `useMic == false`)
+- `h`: toggle the diagnostic HUD (spectrum display)
 
-## Notas de desenvolvimento
+## Development Notes
 
-- Cada layer deve desenhar para o seu `PGraphics` e não desenhar diretamente para o ecrã.
-- Use `palette[index]` para as cores, mantendo assim consistência entre layers.
-- Para gravar frames (para compor o vídeo final), descomente ou mantenha `saveFrame("frames/frame-####.png")` dentro do `draw()` em `AsciiArt.pde`.
+- Each layer should draw to its own `PGraphics` and not directly to the screen.
+- Use `palette[index]` for colors to maintain consistency across layers.
+- To save frames (for composing the final video), uncomment or keep `saveFrame("frames/frame-####.png")` inside `draw()` in `AsciiArt.pde`.
 
-## Documentação do código
+## Code Documentation
 
-Existe um documento com comentários organizados em PT-PT por ficheiro: `docs/CODE_COMMENTS_PT-PT.md`. Consulte-o para localizar funções, variáveis importantes, paleta de cores e handlers de input por layer.
+A document containing organized PT-PT comments by file is available at `docs/CODE_COMMENTS_PT-PT.md`. Refer to it to locate functions, important variables, the color palette, and input handlers for each layer.
 
-## Contribuir
+## Contributing
 
-- Fork + Pull Request. Ao submeter código, siga estas orientações:
-  - Mantenha a paleta centralizada em `AsciiArt.pde`.
-  - Evite modificar o setup global sem consenso.
-  - Documente novas funções com comentários em PT-PT seguindo o estilo do projeto.
+Fork + Pull Request. When submitting code, please follow these guidelines:
 
-## Licença
+- Keep the color palette centralized in `AsciiArt.pde`.
+- Avoid modifying the global setup without team consensus.
+- Document new functions with PT-PT comments following the project's style.
 
-O repositório está destinado a uso académico; defina uma licença explícita se for necessário (por exemplo MIT) antes de fazer release público.
+## License
 
-## Problemas e debugging
+This repository is intended for academic use. Define an explicit license if public release is planned (for example, MIT).
 
-- Se o `SoundFile` não carregar, confirme que o ficheiro existe em `data/` e que o nome está correto.
-- Se o microfone não for detectado, verifique as permissões do sistema e que o `AudioIn` está configurado corretamente.
+## Troubleshooting
 
-## Contribuidores
+- If `SoundFile` fails to load, verify that the file exists in `data/` and that the filename is correct.
+- If the microphone is not detected, check your system permissions and ensure that `AudioIn` is configured correctly.
 
-| Name           | GitHub profile                 |
-| -------------- | ------------------------------ |
-| Miguel Machado | https://github.com/Miguyy      |
-| Petúnia Dias   | https://github.com/petuniadias |
-| Henrique Silva | https://github.com/HenReis     |
+## Contributors
+
+| Name | GitHub Profile |
+|--------|--------|
+| Miguel Machado | https://github.com/Miguyy |
+| Petúnia Dias | https://github.com/petuniadias |
+| Henrique Silva | https://github.com/HenReis |
